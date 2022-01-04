@@ -1,0 +1,19 @@
+Server-side Node.JS microservice is in the "node" directory (refer to README in that directory).
+
+Open index.html in a browser and navigate between other webpages via the navbar.
+
+NOTE: Some features are only partially implemented and there are some bugs that need resolution too.
+
+
+FUTURE WORK
+
+- Test-Driven Development (ideally Jest)
+
+- Authentication (ideally with 2FA)
+
+- Configure into a Docker deployment to be further managed and orchestrated with Kubernetes.
+
+- Data-driven content via a database (ideally MongoDB).
+
+- Provide an admin portal.
+

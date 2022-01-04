@@ -1,0 +1,416 @@
+ <html ng-app>
+
+ <head>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <style>
+   * {
+     font-family: sans-serif;
+   }
+
+   body {
+     background-color: #012657;
+   }
+
+   .container {
+     display: inline-block;
+     max-width: 300px;
+     margin: 0 auto;
+     background-color: #012657;
+     padding: 20px;
+     border-radius: 5px;
+     vertical-align: top;
+   }
+
+   h3 {
+     text-align: center;
+     font-size: 14px;
+     color: rgba(255, 255, 255, 0.3);
+     font-weight: 400;
+   }
+
+   h2 {
+     text-align: center;
+     font-size: 18px;
+     color: rgba(255, 255, 255, 0.3);
+     font-weight: 400;
+   }
+
+   table {
+     text-align: left;
+     font-size: 12px;
+     color: rgba(255, 255, 255, 0.3);
+     font-weight: 400;
+   }
+
+   .navbar {
+     margin-bottom: 0;
+     border: 1px solid #012657;
+   }
+   </style>
+ </head>
+
+ <body>
+   <nav class="navbar navbar-default">
+     <div class="container-fluid">
+       <div class="navbar-header">
+         <a class="navbar-brand" href="#">BCB Group</a>
+       </div>
+       <ul class="nav navbar-nav">
+         <li class="active"><a href="#">Home</a></li>
+         <li><a href="./xrate.html">Exchange Rate Convertor</a></li>
+         <li><a href="./chart.html">Chart Analysis</a></li>
+       </ul>
+     </div>
+   </nav>
+   <div class="fixed-top">
+     <marquee direction="left" scrollamount="5" scrolldelay="1" bgcolor="#fff" id="marquee"><span ng-style="{color: BTCUSDcolorPreference}" id="btcusdmarqueetext">BTC/USD: {{ btcusdprice }}</span><span style="color: black"> | </span><span ng-style="{color: ETHUSDcolorPreference}" id="ethusdmarqueetext">ETH/USD: {{ ethusdprice }}</span><span style="color: black"> | </span><span ng-style="{color: XRPUSDcolorPreference}" id="xrpusdmarqueetext">XRP/USD: {{ xrpusdprice }}</span><span style="color: black"> | </span><span ng-style="{color: LTCUSDcolorPreference}" id="ltcusdmarqueetext">LTC/USD: {{ ltcusdprice }}</span><span style="color: black"> | </span><span ng-style="{color: BCHUSDcolorPreference}" id="bchusdmarqueetext">BCH/USD: {{ bchusdprice }}</span><span style="color: black"> | </span><span ng-style="{color: ETCUSDcolorPreference}" id="etcusdmarqueetext">ETC/USD: {{ etcusdprice }}</span>
+     </marquee>
+   </div>
+   <div>
+     <div class="container">
+       <canvas id="BTCUSD" width="300" height="200"></canvas>
+     </div>
+     <div class="container">
+       <canvas id="ETHUSD" width="300" height="200"></canvas>
+     </div>
+     <div class="container">
+       <canvas id="XRPUSD" width="300" height="200"></canvas>
+     </div>
+     <div class="container">
+       <div class="table-container">
+         <table class="table">
+           <thead>
+             <tr>
+               <th> Name</th>
+               <th> Price</th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td>BTC/USD</td>
+               <td ng-style="{color: BTCUSDcolorPreference}" id="BTCUSDprice"> {{ btcusdprice }} </td>
+             </tr>
+             <tr>
+               <td>ETH/USD</td>
+               <td ng-style="{color: ETHUSDcolorPreference}" id="ETHUSDprice"> {{ ethusdprice }} </td>
+             </tr>
+             <tr>
+               <td>XRP/USD</td>
+               <td ng-style="{color: XRPUSDcolorPreference}" id="XRPUSDprice"> {{ xrpusdprice }} </td>
+             </tr>
+             <tr>
+               <td>LTC/USD</td>
+               <td ng-style="{color: LTCUSDcolorPreference}" id="LTCUSDprice"> {{ ltcusdprice }} </td>
+             </tr>
+             <tr>
+               <td>BCH/USD</td>
+               <td ng-style="{color: BCHUSDcolorPreference}" id="BCHUSDprice"> {{ bchusdprice }} </td>
+             </tr>
+             <tr>
+               <td>ETC/USD</td>
+               <td ng-style="{color: ETCUSDcolorPreference}" id="ETCUSDprice"> {{ etcusdprice }} </td>
+             </tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+   </div>
+   <div class="container">
+     <canvas id="LTCUSD" width="300" height="200"></canvas>
+   </div>
+   <div class="container">
+     <canvas id="BCHUSD" width="300" height="200"></canvas>
+   </div>
+   <div class="container">
+     <canvas id="ETCUSD" width="300" height="200"></canvas>
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+   <hr>
+   <div>
+     <div class="container">
+       <canvas id="BTCGBP" width="300" height="200"></canvas>
+     </div>
+     <div class="container">
+       <canvas id="ETHGBP" width="300" height="200"></canvas>
+     </div>
+     <div class="container">
+       <canvas id="XRPGBP" width="300" height="200"></canvas>
+     </div>
+     <div class="container">
+       <div class="table-container">
+         <table class="table">
+           <thead>
+             <tr>
+               <th> Name</th>
+               <th> Price</th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td>BTC/GBP</td>
+               <td ng-style="{color: BTCGBPcolorPreference}" id="BTCGBPprice"> {{ btcgbpprice }} </td>
+             </tr>
+             <tr>
+               <td>ETH/GBP</td>
+               <td ng-style="{color: ETHGBPcolorPreference}" id="ETHGBPprice"> {{ ethgbpprice }} </td>
+             </tr>
+             <tr>
+               <td>XRP/GBP</td>
+               <td ng-style="{color: XRPGBPcolorPreference}" id="XRPGBPprice"> {{ xrpgbpprice }} </td>
+             </tr>
+             <tr>
+               <td>LTC/GBP</td>
+               <td ng-style="{color: LTCGBPcolorPreference}" id="LTCGBPprice"> {{ ltcgbpprice }} </td>
+             </tr>
+             <tr>
+               <td>BCH/GBP</td>
+               <td ng-style="{color: BCHGBPcolorPreference}" id="BCHGBPprice"> {{ bchgbpprice }} </td>
+             </tr>
+             <tr>
+               <td>ETC/GBP</td>
+               <td ng-style="{color: ETCGBPcolorPreference}" id="ETCGBPprice"> {{ etcgbpprice }} </td>
+             </tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+   </div>
+   <div class="container">
+     <canvas id="LTCGBP" width="300" height="200"></canvas>
+   </div>
+   <div class="container">
+     <canvas id="BCHGBP" width="300" height="200"></canvas>
+   </div>
+   <div class="container">
+     <canvas id="ETCGBP" width="300" height="200"></canvas>
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+   </div>
+   <script>
+   var previousBTCUSDPrice;
+   var previousETHUSDPrice;
+   var previousXRPUSDPrice;
+   var previousLTCUSDPrice;
+   var previousBCHUSDPrice;
+   var previousETCUSDPrice;
+   var previousBTCGBPPrice;
+   var previousETHGBPPrice;
+   var previousXRPGBPPrice;
+   var previousLTCGBPPrice;
+   var previousBCHGBPPrice;
+   var previousETCGBPPrice;
+   const getData = async () => {
+     fetch('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP,LTC,BCH,ETC&tsyms=USD,GBP,EUR,JPY,ZAR&limit=30&api_key=1fa431c5eecbc3454e75716240f908e4997a47aeea8381991e3d236b4d1501c0').then(response => response.json()).then(data => {
+       // COULD USE eval BUT big security risk...
+       // console.log(">>>>>>>" + data["RAW"]["BTC"]["USD"]["PRICE"]);
+       var scope = angular.element(document.getElementById("BTCUSDprice")).scope();
+       //scope.btcusdprice = data["USD"];
+       scope.btcusdprice = data["RAW"]["BTC"]["USD"]["PRICE"];
+       scope.$apply();
+       var _scope = angular.element(document.getElementById("btcusdmarqueetext")).scope();
+       if(data["RAW"]["BTC"]["USD"]["PRICE"] < previousBTCUSDPrice) {
+         _scope.BTCUSDcolorPreference = "red";
+       } else if(data["RAW"]["BTC"]["USD"]["PRICE"] > previousBTCUSDPrice) {
+         _scope.BTCUSDcolorPreference = "green";
+       }
+       _scope.$apply();
+       previousBTCUSDPrice = data["RAW"]["BTC"]["USD"]["PRICE"];
+       scope = angular.element(document.getElementById("ETHUSDprice")).scope();
+       scope.ethusdprice = data["RAW"]["ETH"]["USD"]["PRICE"];
+       scope.$apply();
+       _scope = angular.element(document.getElementById("ethusdmarqueetext")).scope();
+       if(data["RAW"]["ETH"]["USD"]["PRICE"] < previousBTCUSDPrice) {
+         _scope.ETHUSDcolorPreference = "red";
+       } else if(data["RAW"]["ETH"]["USD"]["PRICE"] > previousBTCUSDPrice) {
+         _scope.ETHUSDcolorPreference = "green";
+       }
+       _scope.$apply();
+       previousETHUSDPrice = data["RAW"]["ETH"]["USD"]["PRICE"];
+       scope = angular.element(document.getElementById("XRPUSDprice")).scope();
+       scope.xrpusdprice = data["RAW"]["XRP"]["USD"]["PRICE"];
+       scope.$apply();
+       _scope = angular.element(document.getElementById("xrpusdmarqueetext")).scope();
+       if(data["RAW"]["XRP"]["USD"]["PRICE"] < previousXRPUSDPrice) {
+         _scope.XRPUSDcolorPreference = "red";
+       } else if(data["RAW"]["XRP"]["USD"]["PRICE"] > previousXRPUSDPrice) {
+         _scope.XRPUSDcolorPreference = "green";
+       }
+       _scope.$apply();
+       previousXRPUSDPrice = data["RAW"]["XRP"]["USD"]["PRICE"];
+       scope = angular.element(document.getElementById("LTCUSDprice")).scope();
+       scope.ltcusdprice = data["RAW"]["LTC"]["USD"]["PRICE"];
+       scope.$apply();
+       _scope = angular.element(document.getElementById("ltcusdmarqueetext")).scope();
+       if(data["RAW"]["LTC"]["USD"]["PRICE"] < previousLTCUSDPrice) {
+         _scope.LTCUSDcolorPreference = "red";
+       } else if(data["RAW"]["LTC"]["USD"]["PRICE"] > previousLTCUSDPrice) {
+         _scope.LTCUSDcolorPreference = "green";
+       }
+       _scope.$apply();
+       previousLTCUSDPrice = data["RAW"]["LTC"]["USD"]["PRICE"];
+       scope = angular.element(document.getElementById("BCHUSDprice")).scope();
+       scope.bchusdprice = data["RAW"]["BCH"]["USD"]["PRICE"];
+       scope.$apply();
+       _scope = angular.element(document.getElementById("bchusdmarqueetext")).scope();
+       if(data["RAW"]["BCH"]["USD"]["PRICE"] < previousBCHUSDPrice) {
+         _scope.BCHUSDcolorPreference = "red";
+       } else if(data["RAW"]["BCH"]["USD"]["PRICE"] > previousLTCUSDPrice) {
+         _scope.BCHUSDcolorPreference = "green";
+       }
+       _scope.$apply();
+       previousBCHUSDPrice = data["RAW"]["BCH"]["USD"]["PRICE"];
+       scope = angular.element(document.getElementById("ETCUSDprice")).scope();
+       scope.etcusdprice = data["RAW"]["ETC"]["USD"]["PRICE"];
+       scope.$apply();
+       _scope = angular.element(document.getElementById("etcusdmarqueetext")).scope();
+       if(data["RAW"]["ETC"]["USD"]["PRICE"] < previousETCUSDPrice) {
+         _scope.ETCUSDcolorPreference = "red";
+       } else if(data["RAW"]["ETC"]["USD"]["PRICE"] > previousETCUSDPrice) {
+         _scope.ETCUSDcolorPreference = "green";
+       }
+       _scope.$apply();
+       previousETCUSDPrice = data["RAW"]["ETC"]["USD"]["PRICE"];
+       scope = angular.element(document.getElementById("BTCGBPprice")).scope();
+       scope.btcgbpprice = data["RAW"]["BTC"]["GBP"]["PRICE"];
+       scope.$apply();
+       _scope = angular.element(document.getElementById("btcgbpmarqueetext")).scope();
+       if(data["RAW"]["BTC"]["GBP"]["PRICE"] < previousBTCGBPPrice) {
+         _scope.BTCGBPcolorPreference = "red";
+       } else if(data["RAW"]["BTC"]["GBP"]["PRICE"] > previousBTCGBPPrice) {
+         _scope.BTCGBPcolorPreference = "green";
+       }
+       _scope.$apply();
+       previousBTCGBPPrice = data["RAW"]["BTC"]["GBP"]["PRICE"];
+       scope = angular.element(document.getElementById("BTCEURprice")).scope();
+       scope.btceurprice = data["RAW"]["BTC"]["EUR"]["PRICE"];
+       scope.$apply();
+       _scope = angular.element(document.getElementById("btceurmarqueetext")).scope();
+       if(data["RAW"]["BTC"]["EUR"]["PRICE"] < previousBTCEURPrice) {
+         _scope.BTCEURcolorPreference = "red";
+       } else if(data["RAW"]["BTC"]["EUR"]["PRICE"] > previousBTCEURPrice) {
+         _scope.BTCEURcolorPreference = "green";
+       }
+       _scope.$apply();
+       previousBTCEURPrice = data["RAW"]["BTC"]["EUR"]["PRICE"];
+     });
+   }
+   getData();
+   setInterval(function() {
+     getData();
+   }, 1000);
+   </script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+   <script>
+   $(document).ready(function() {
+     function chart(bCurrency, qCurrency) {
+       var days = [];
+       var prices = [];
+       $.getJSON('https://min-api.cryptocompare.com/data/histoday?fsym=' + bCurrency + '&tsym=' + qCurrency + '&limit=30&api_key=1fa431c5eecbc3454e75716240f908e4997a47aeea8381991e3d236b4d1501c0', function(data) {
+         var api = data.Data;
+         for(var day in api) {
+           var time1 = api[day].time;
+           var time2 = time1 * 1000;
+           var time3 = new Date(time2);
+           var timeD = time3.getDate();
+           var timeM = time3.getMonth() + 1;
+           if(timeM < 10) {
+             timeM = '0' + timeM
+           }
+           var timeY = time3.getFullYear();
+           var date = '';
+           date += timeD + '.' + timeM + '.' + timeY;
+           var close = api[day].close;
+           days.push(date);
+           prices.push(close);
+         }
+         var ctx = document.getElementById(bCurrency + qCurrency).getContext('2d');
+         var myChart = new Chart(ctx, {
+           type: 'line',
+           data: {
+             labels: days,
+             datasets: [{
+               label: bCurrency + "/" + qCurrency,
+               data: prices,
+               backgroundColor: 'rgba(255, 255, 255, 0.1)',
+               borderColor: 'rgba(255, 255, 255, 0.3)',
+               borderWidth: 1,
+               pointRadius: 30,
+               pointHoverRadius: 310,
+               pointBackgroundColor: 'rgba(255, 255, 255, 0)',
+               pointBorderColor: 'rgba(255, 255, 255, 0)',
+               pointBorderWidth: 0,
+             }]
+           },
+           options: {
+             legend: {
+               labels: {
+                 fontColor: 'rgba(255, 255, 255, 0.4)'
+               }
+             },
+             tooltips: {
+               callbacks: {
+                 label: function(tooltipItem) {
+                   return tooltipItem.yLabel;
+                 }
+               }
+             },
+             scales: {
+               yAxes: [{
+                 ticks: {
+                   beginAtZero: false,
+                   fontColor: 'rgba(255, 255, 255, 0.4)',
+                 },
+                 gridLines: {
+                   display: true,
+                   color: 'rgba(255, 255, 255, 0.1)'
+                 }
+               }],
+               xAxes: [{
+                 ticks: {
+                   beginAtZero: false,
+                   fontColor: 'rgba(255, 255, 255, 0.4)',
+                 },
+                 gridLines: {
+                   display: true,
+                   color: 'rgba(255, 255, 255, 0.1)'
+                 }
+               }]
+             }
+           }
+         });
+       })
+     }
+     chart('BTC', 'USD');
+     chart('ETH', 'USD');
+     chart('XRP', 'USD');
+     chart('LTC', 'USD');
+     chart('BCH', 'USD');
+     chart('ETC', 'USD');
+     chart('BTC', 'GBP');
+     chart('ETH', 'GBP');
+     chart('XRP', 'GBP');
+     chart('LTC', 'GBP');
+     chart('BCH', 'GBP');
+     chart('ETC', 'GBP');
+     chart('ETC', 'EUR');
+     chart('ETH', 'EUR');
+     chart('XRP', 'EUR');
+     chart('LTC', 'EUR');
+     chart('BCH', 'EUR');
+     chart('ETC', 'EUR');
+   })
+   </script>
+ </body>
+
+ </html>

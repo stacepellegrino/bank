@@ -1,0 +1,12 @@
+In this current directory execute the following commands to install and run:
+
+npm install
+
+npm start
+
+
+Upon start go to the following URL with a HTTP client:
+
+http://localhost:3000/price?base=GBP&quote=USD
+
+Price is returned via a console.log and web browser (requires a reload to display price via a HTTP client, which is a bug to research further).

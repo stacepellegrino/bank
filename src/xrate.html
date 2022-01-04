@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style>
+  * {
+    font-family: sans-serif;
+  }
+
+  body {
+    background-color: #012657;
+  }
+
+  .container {
+    max-width: 300px;
+    margin: 0 auto;
+    background-color: #012657;
+    padding: 20px;
+    border-radius: 5px;
+    vertical-align: top;
+  }
+
+  h3 {
+    text-align: left;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 400;
+  }
+
+  h2 {
+    text-align: left;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 400;
+  }
+
+  h1 {
+    text-align: left;
+    font-size: 26px;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 400;
+  }
+
+  .navbar {
+    margin-bottom: 0;
+    border: 1px solid #012657;
+  }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">BCB Group</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="./index.html">Home</a></li>
+        <li class="active"><a href="#">Exchange Rate Convertor</a></li>
+        <li><a href="./chart.html">Chart Analysis</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div ng-app="myApp" ng-controller="studentController">
+    <div data-ng-init="base='BTC'; quote=" USD" ">
+	
+<div class=" container">
+      <div class="col-xs-12">
+        <h2>Amount:</h2>
+        <input onchange="calculate()" type="text" size="40" ng-model="selectedAmount" id="inputPrice">
+      </div>
+      <div class="col-xs-4">
+        <h3>Base:</h3>
+        <select onchange="calculate()" ng-model="baseType" id="baseCurrency">
+          <option ng-repeat="base in bases">{{ base }}</option>
+        </select>
+      </div>
+      <div class="col-xs-4">
+        <h3>Quote:</h3>
+        <select onchange="calculate()" ng-model="quoteType" id="quoteCurrency">
+          <option ng-repeat="quote in quotes">{{ quote }}</option>
+        </select>
+      </div>
+      <div class="col-xs-12">
+        <hr>
+      </div>
+      <div class="col-xs-12">
+        <h3>Price:</h3>
+        <h1 id="price">{{ price }}</h1>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script>
+  angular.module('myApp', []).controller('studentController', function($scope) {
+    $scope.bases = ["BTC", "ETH", "XRP", "LTC", "BCH", "ETC"];
+    $scope.quotes = ["USD", "GBP", "EUR", "JPY", "ZAR"];
+  });
+  </script>
+  <script>
+  function calculate() {
+    iPrice = document.getElementById("inputPrice").value;
+    bCurrency = document.getElementById("baseCurrency").value;
+    qCurrency = document.getElementById("quoteCurrency").value;
+    xrate = getData(bCurrency, qCurrency);
+    console.log(">>>>>>> " + xrate);
+    document.getElementById("price").innerHTML = xrate * iPrice;
+  }
+  </script>
+  <script>
+  const getData = async (bCurrency, qCurrency) => {
+    fetch('https://min-api.cryptocompare.com/data/price?fsym=' + bCurrency + '&tsyms=' + qCurrency + '&api_key=1fa431c5eecbc3454e75716240f908e4997a47aeea8381991e3d236b4d1501c0').then(response => response.json()).then(data => {
+      console.log(data);
+      document.getElementById("price").innerHTML = data[qCurrency] * document.getElementById("inputPrice").value;
+      console.log("bCurrency: " + bCurrency);
+      console.log("qCurrency: " + qCurrency);
+      return data[qCurrency];
+    });
+  }
+  calculate();
+  getData(document.getElementById("baseCurrency").value, document.getElementById("quoteCurrency").value);
+  setInterval(function() {
+    getData(document.getElementById("baseCurrency").value, document.getElementById("quoteCurrency").value);
+  }, 1000);
+  </script>
+</body>
+
+</html>

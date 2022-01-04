@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <meta name="viewport" content="width=device-width" />
+  <title>WooHoo</title>
+  <style>
+  * {
+    font-family: sans-serif;
+  }
+
+  body {
+    background-color: #012657;
+  }
+
+  .container {
+    display: inline-block;
+    max-width: 300px;
+    margin: 0 auto;
+    background-color: #012657;
+    padding: 20px;
+    border-radius: 5px;
+    vertical-align: top;
+  }
+
+  h3 {
+    text-align: center;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 400;
+  }
+
+  h2 {
+    text-align: center;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 400;
+  }
+
+  table {
+    text-align: left;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 400;
+  }
+
+  .navbar {
+    margin-bottom: 0;
+    border: 1px solid #012657;
+  }
+
+  ul.dropdown-menu li {
+    cursor: pointer;
+  }
+
+  ul.dropdown-menu li span.red {
+    color: red;
+  }
+
+  ul.dropdown-menu li span.green {
+    color: green;
+  }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">BCB Group</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./xrate.html">Exchange Rate Convertor</a></li>
+        <li class="active"> <a href="#">Chart Analysis</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container" ng-app="myApplication" ng-controller="myController">
+    <div class="row">
+      <div class="col-xs-12">
+        <input type="radio" checked="checked" id="usdradio" name="qCurrency" value="USD">
+        <label for="usdradio">
+          <h3>USD</h3>
+        </label>
+        <input type="radio" id="gbpradio" name="qCurrency" value="GBP">
+        <label for="gbpradio">
+          <h3>GBP</h3>
+        </label>
+        <input type="radio" id="eurradio" name="qCurrency" value="EUR">
+        <label for="eurradio">
+          <h3>EURO</h3>
+        </label>
+        <input type="radio" id="jpyradio" name="qCurrency" value="JPY">
+        <label for="jpyradio">
+          <h3>JPY</h3>
+        </label>
+        <input type="radio" id="zarradio" name="qCurrency" value="ZAR">
+        <label for="zarradio">
+          <h3>ZAR</h3>
+        </label>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <dropdown-multiselect model="selectedUserIds" options="users"></dropdown-multiselect>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <canvas id="USD" width="300" height="150"></canvas>
+    </div>
+  </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <script>
+  var varMyDirectivesApplication = angular.module('myDirectivesApplication', []);
+  varMyDirectivesApplication.directive('dropdownMultiselect', function() {
+    return {
+      restrict: 'E',
+      scope: {
+        model: '=',
+        options: '=',
+      },
+      template: "<div class='btn-group' data-ng-class='{open: open}'>" + "<button class='btn btn-small'>Select...</button>" + "<button class='btn btn-small dropdown-toggle' data-ng-click='openDropdown()'><span class='caret'></span></button>" + "<ul class='dropdown-menu' aria-labelledby='dropdownMenu'>" + "<li><a data-ng-click='selectAll()'><span class='glyphicon glyphicon-ok green' aria-hidden='true'></span> Check All</a></li>" + "<li><a data-ng-click='deselectAll();'><span class='glyphicon glyphicon-remove red' aria-hidden='true'></span> Uncheck All</a></li>" + "<li class='divider'></li>" + "<li data-ng-repeat='option in options'><a data-ng-click='toggleSelectItem(option)'><span data-ng-class='getClassName(option)' aria-hidden='true'></span> {{option.name}}</a></li>" + "</ul>" + "</div>",
+      controller: function($scope) {
+        $scope.openDropdown = function() {
+          $scope.open = !$scope.open;
+        };
+        $scope.selectAll = function() {
+          $scope.model = [];
+          angular.forEach($scope.options, function(item, index) {
+            $scope.model.push(item.id);
+          });
+        };
+        $scope.deselectAll = function() {
+          $scope.model = [];
+        };
+        $scope.toggleSelectItem = function(option) {
+          var intIndex = -1;
+          angular.forEach($scope.model, function(item, index) {
+            if(item == option.id) {
+              intIndex = index;
+            }
+          });
+          if(intIndex >= 0) {
+            $scope.model.splice(intIndex, 1);
+          } else {
+            $scope.model.push(option.id);
+          }
+        };
+        $scope.getClassName = function(option) {
+          var varClassName = 'glyphicon glyphicon-remove red';
+          angular.forEach($scope.model, function(item, index) {
+            if(item == option.id) {
+              varClassName = 'glyphicon glyphicon-ok green';
+            }
+          });
+          return (varClassName);
+        };
+      }
+    }
+  });
+  var varMyApplication = angular.module('myApplication', ['myDirectivesApplication']);
+  varMyApplication.controller('myController', function($scope) {
+    $scope.bases = ["BTC", "ETH", "XRP", "LTC", "BCH", "ETC"];
+    $scope.quotes = ["USD", "GBP", "EUR", "JPY", "ZAR"];
+    $scope.users = [{
+      "id": 1,
+      "name": "BTC"
+    }, {
+      "id": 2,
+      "name": "ETH"
+    }, {
+      "id": 3,
+      "name": "XRP"
+    }, {
+      "id": 4,
+      "name": "LTC"
+    }, {
+      "id": 5,
+      "name": "BCH"
+    }, {
+      "id": 6,
+      "name": "ETC"
+    }];
+    $scope.selectedUserIds = [1, 2, 3, 4, 5, 6];
+  });
+  </script>
+  <script>
+  $(document).ready(function() {
+    function chart(bCurrency, qCurrency) {
+      var BTCUSDdays = [];
+      var BTCUSDprices = [];
+      var ETHUSDdays = [];
+      var ETHUSDprices = [];
+      var XRPUSDdays = [];
+      var XRPUSDprices = [];
+      var LTCUSDdays = [];
+      var LTCUSDprices = [];
+      $.getJSON('https://min-api.cryptocompare.com/data/histoday?fsym=' + 'BTC' + '&tsym=' + 'USD' + '&limit=1000&api_key=1fa431c5eecbc3454e75716240f908e4997a47aeea8381991e3d236b4d1501c0', function(data) {
+        var api = data.Data;
+        for(var day in api) {
+          var time1 = api[day].time;
+          var time2 = time1 * 1000;
+          var time3 = new Date(time2);
+          var timeD = time3.getDate();
+          var timeM = time3.getMonth() + 1;
+          if(timeM < 10) {
+            timeM = '0' + timeM
+          }
+          var timeY = time3.getFullYear();
+          var date = '';
+          date += timeD + '.' + timeM + '.' + timeY;
+          var close = api[day].close;
+          BTCUSDdays.push(date);
+          BTCUSDprices.push(close);
+        }
+        $.getJSON('https://min-api.cryptocompare.com/data/histoday?fsym=' + 'ETH' + '&tsym=' + 'USD' + '&limit=1000&api_key=1fa431c5eecbc3454e75716240f908e4997a47aeea8381991e3d236b4d1501c0', function(data) {
+          var api = data.Data;
+          for(var day in api) {
+            var time1 = api[day].time;
+            var time2 = time1 * 1000;
+            var time3 = new Date(time2);
+            var timeD = time3.getDate();
+            var timeM = time3.getMonth() + 1;
+            if(timeM < 10) {
+              timeM = '0' + timeM
+            }
+            var timeY = time3.getFullYear();
+            var date = '';
+            date += timeD + '.' + timeM + '.' + timeY;
+            var close = api[day].close;
+            ETHUSDdays.push(date);
+            ETHUSDprices.push(close);
+          }
+          $.getJSON('https://min-api.cryptocompare.com/data/histoday?fsym=' + 'XRP' + '&tsym=' + 'USD' + '&limit=1000&api_key=1fa431c5eecbc3454e75716240f908e4997a47aeea8381991e3d236b4d1501c0', function(data) {
+            var api = data.Data;
+            for(var day in api) {
+              var time1 = api[day].time;
+              var time2 = time1 * 1000;
+              var time3 = new Date(time2);
+              var timeD = time3.getDate();
+              var timeM = time3.getMonth() + 1;
+              if(timeM < 10) {
+                timeM = '0' + timeM
+              }
+              var timeY = time3.getFullYear();
+              var date = '';
+              date += timeD + '.' + timeM + '.' + timeY;
+              var close = api[day].close;
+              XRPUSDdays.push(date);
+              XRPUSDprices.push(close);
+            }
+            $.getJSON('https://min-api.cryptocompare.com/data/histoday?fsym=' + 'LTC' + '&tsym=' + 'USD' + '&limit=1000&api_key=1fa431c5eecbc3454e75716240f908e4997a47aeea8381991e3d236b4d1501c0', function(data) {
+              var api = data.Data;
+              for(var day in api) {
+                var time1 = api[day].time;
+                var time2 = time1 * 1000;
+                var time3 = new Date(time2);
+                var timeD = time3.getDate();
+                var timeM = time3.getMonth() + 1;
+                if(timeM < 10) {
+                  timeM = '0' + timeM
+                }
+                var timeY = time3.getFullYear();
+                var date = '';
+                date += timeD + '.' + timeM + '.' + timeY;
+                var close = api[day].close;
+                LTCUSDdays.push(date);
+                LTCUSDprices.push(close);
+              }
+              var ctx = document.getElementById("USD").getContext('2d');
+              var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: BTCUSDdays,
+                  datasets: [{
+                    label: "BTC",
+                    data: BTCUSDprices,
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                    borderWidth: 1,
+                    pointRadius: 30,
+                    pointHoverRadius: 310,
+                    pointBackgroundColor: 'rgba(255, 255, 255, 0)',
+                    pointBorderColor: 'rgba(255, 255, 255, 0)',
+                    pointBorderWidth: 0,
+                  }, {
+                    label: "ETH",
+                    data: ETHUSDprices,
+                    backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                    borderColor: 'rgba(0, 255, 0, 0.3)',
+                    borderWidth: 1,
+                    pointRadius: 30,
+                    pointHoverRadius: 310,
+                    pointBackgroundColor: 'rgba(255, 255, 255, 0)',
+                    pointBorderColor: 'rgba(255, 255, 255, 0)',
+                    pointBorderWidth: 0,
+                  }, {
+                    label: "XRP",
+                    data: XRPUSDprices,
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    borderColor: 'rgba(255, 0, 0, 0.3)',
+                    borderWidth: 1,
+                    pointRadius: 30,
+                    pointHoverRadius: 310,
+                    pointBackgroundColor: 'rgba(255, 255, 255, 0)',
+                    pointBorderColor: 'rgba(255, 255, 255, 0)',
+                    pointBorderWidth: 0,
+                  }, {
+                    label: "LTC",
+                    data: LTCUSDprices,
+                    backgroundColor: 'rgba(128, 128, 0, 0.1)',
+                    borderColor: 'rgba(128, 128, 0, 0.3)',
+                    borderWidth: 1,
+                    pointRadius: 30,
+                    pointHoverRadius: 310,
+                    pointBackgroundColor: 'rgba(255, 255, 255, 0)',
+                    pointBorderColor: 'rgba(255, 255, 255, 0)',
+                    pointBorderWidth: 0,
+                  }]
+                },
+                options: {
+                  legend: {
+                    labels: {
+                      fontColor: 'rgba(255, 255, 255, 0.4)'
+                    }
+                  },
+                  tooltips: {
+                    callbacks: {
+                      label: function(tooltipItem) {
+                        return tooltipItem.yLabel;
+                      }
+                    }
+                  },
+                  scales: {
+                    yAxes: [{
+                      ticks: {
+                        beginAtZero: false,
+                        fontColor: 'rgba(255, 255, 255, 0.4)',
+                      },
+                      gridLines: {
+                        display: true,
+                        color: 'rgba(255, 255, 255, 0.1)'
+                      }
+                    }],
+                    xAxes: [{
+                      ticks: {
+                        beginAtZero: false,
+                        fontColor: 'rgba(255, 255, 255, 0.4)',
+                      },
+                      gridLines: {
+                        display: true,
+                        color: 'rgba(255, 255, 255, 0.1)'
+                      }
+                    }]
+                  }
+                }
+              });
+            })
+          })
+        })
+      })
+    }
+    chart("BTC", "USD");
+  })
+  </script>
+</body>
+
+</html>
